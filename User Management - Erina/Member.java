@@ -1,52 +1,43 @@
 import java.util.ArrayList;
-
-import javax.swing.JOptionPane;
+import java.util.List;
 
 public class Member {
-    private String memberID;
     private String name;
-    private String contact;
-    private ArrayList<Book> borrowList;
+    private String memberId;
+    private List<Book> borrowedBooks;
 
-    public Member(String mID,String n, String con) {
-        this.name=n;
-        this.memberID=mID;
-        this.contact=con;
-        borrowList=new ArrayList<>();
+    public Member(String name, String memberId) {
+        this.name = name;
+        this.memberId = memberId;
+        this.borrowedBooks = new ArrayList<>();
     }
 
-    public String getMemberID(){
-        return memberID;
-    }
-
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public String getContact(){
-        return contact;
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public List<Book> getBorrowedBooks() {
+        return borrowedBooks;
     }
 
     public void borrowBook(Book book) {
-        borrowList.add(book); 
-        book.setStatus("Borrowed");
-    }
-
-    public void requestBook(Book book) {
-
-    }
-
-    public void SearchMember() {
-
-    }
-    
-    public void displayBorrowingRecord() {
-        StringBuilder recordDisplay = new StringBuilder("Borrowing Records For " + name + "\n");
-
-        for (Book brList : borrowList) {
-            recordDisplay.append("\n- ").append(brList.getTitle());
+        if (book.isAvailable()) {
+            borrowedBooks.add(book);
+            book.setAvailable(false);
+        } else {
+            System.out.println("Book is not available.");
         }
+    }
 
-        JOptionPane.showMessageDialog(null, recordDisplay.toString());
+    public void returnBook(Book book) {
+        if (borrowedBooks.remove(book)) {
+            book.setAvailable(true);
+        } else {
+            System.out.println("This book was not borrowed by you.");
+        }
     }
 }
